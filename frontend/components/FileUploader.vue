@@ -1,12 +1,12 @@
 <template>
   <div class="w-full max-w-2xl mx-auto">
     <div 
-      class="relative border-2 border-dashed rounded-xl transition-all duration-300 ease-in-out cursor-pointer group"
+      class="relative border-2 border-dashed rounded-md transition-all duration-200 cursor-pointer"
       :class="{
-        'border-blue-400 bg-blue-50 scale-105 shadow-lg': isDragOver,
-        'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100 hover:shadow-md': !isDragOver && !selectedFile && !isUploading,
-        'border-green-400 bg-green-50': selectedFile && !isUploading,
-        'border-blue-400 bg-blue-50': isUploading
+        'border-gray-400 bg-gray-50': isDragOver,
+        'border-gray-200 hover:border-gray-300 hover:bg-gray-50': !isDragOver && !selectedFile && !isUploading,
+        'border-green-500 bg-green-50': selectedFile && !isUploading,
+        'border-gray-300 bg-gray-50': isUploading
       }"
       @drop="handleDrop"
       @dragover="handleDragOver"
@@ -25,59 +25,55 @@
       <!-- Upload State -->
       <div v-if="!selectedFile && !isUploading" class="p-12 text-center">
         <div class="mb-6">
-          <div class="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          <div class="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
           </div>
         </div>
         
-        <h3 class="text-2xl font-bold text-gray-800 mb-3">
-          Upload Your Resume
+        <h3 class="text-lg font-medium text-gray-900 mb-2">
+          Upload Resume
         </h3>
         
-        <p class="text-gray-600 mb-2 text-lg">
+        <p class="text-sm text-gray-600 mb-6">
           Drag and drop your resume here, or 
-          <span class="text-blue-600 font-semibold hover:text-blue-700 transition-colors">click to browse</span>
+          <span class="font-medium text-gray-900">click to browse</span>
         </p>
         
-        <div class="flex items-center justify-center space-x-4 mt-6">
-          <div class="flex items-center space-x-2 text-sm text-gray-500">
-            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v1.5a1.5 1.5 0 001.5 1.5h1.5a1.5 1.5 0 001.5-1.5V5a2 2 0 00-2-2H4zM4 8a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H4z" clip-rule="evenodd" />
-            </svg>
-            <span>PDF</span>
-          </div>
-          <div class="flex items-center space-x-2 text-sm text-gray-500">
-            <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v1.5a1.5 1.5 0 001.5 1.5h1.5a1.5 1.5 0 001.5-1.5V5a2 2 0 00-2-2H4zM4 8a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H4z" clip-rule="evenodd" />
-            </svg>
-            <span>DOCX</span>
-          </div>
-          <div class="text-sm text-gray-500">• Max 5MB</div>
+        <div class="flex items-center justify-center space-x-6 text-xs text-gray-500">
+          <span class="flex items-center">
+            <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+            PDF
+          </span>
+          <span class="flex items-center">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+            DOCX
+          </span>
+          <span>Max 5MB</span>
         </div>
       </div>
 
       <!-- Uploading State -->
       <div v-else-if="isUploading" class="p-12 text-center">
         <div class="mb-6">
-          <div class="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-            <div class="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          <div class="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+            <div class="loading-spinner"></div>
           </div>
         </div>
         
-        <h3 class="text-2xl font-bold text-gray-800 mb-4">
-          Processing Your Resume
+        <h3 class="text-lg font-medium text-gray-900 mb-4">
+          Processing Resume
         </h3>
         
-        <div class="w-full bg-gray-200 rounded-full h-3 mb-4 overflow-hidden">
+        <div class="w-full bg-gray-100 rounded-full h-2 mb-4">
           <div 
-            class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500 ease-out"
+            class="h-full bg-gray-900 rounded-full transition-all duration-300"
             :style="{ width: uploadProgress + '%' }"
           ></div>
         </div>
         
-        <p class="text-gray-600 font-medium">
+        <p class="text-sm text-gray-600">
           {{ uploadProgress }}% complete
         </p>
       </div>
@@ -85,35 +81,35 @@
       <!-- Success State -->
       <div v-else-if="selectedFile" class="p-12 text-center">
         <div class="mb-6">
-          <div class="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white text-3xl animate-pulse">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <div class="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
             </svg>
           </div>
         </div>
         
-        <h3 class="text-2xl font-bold text-gray-800 mb-3">
-          Resume Uploaded Successfully!
+        <h3 class="text-lg font-medium text-gray-900 mb-4">
+          Resume Uploaded
         </h3>
         
-        <div class="bg-white rounded-lg p-6 mb-6 shadow-sm border border-gray-200">
+        <div class="bg-white border border-gray-100 rounded-md p-4 mb-6">
           <div class="flex items-center justify-center space-x-3">
-            <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v1.5a1.5 1.5 0 001.5 1.5h1.5a1.5 1.5 0 001.5-1.5V5a2 2 0 00-2-2H4zM4 8a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H4z" clip-rule="evenodd" />
             </svg>
             <div class="text-left">
-              <p class="font-semibold text-gray-800 truncate max-w-xs">{{ selectedFile.name }}</p>
-              <p class="text-sm text-gray-500">{{ formatFileSize(selectedFile.size) }}</p>
+              <p class="text-sm font-medium text-gray-900 truncate max-w-xs">{{ selectedFile.name }}</p>
+              <p class="text-xs text-gray-500">{{ formatFileSize(selectedFile.size) }}</p>
             </div>
           </div>
         </div>
         
         <button 
           @click="clearFile" 
-          class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+          class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
         >
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
           </svg>
           Upload Different File
         </button>
@@ -122,22 +118,22 @@
       <!-- Drag overlay -->
       <div 
         v-if="isDragOver"
-        class="absolute inset-0 bg-blue-500 bg-opacity-10 rounded-xl flex items-center justify-center backdrop-blur-sm"
+        class="absolute inset-0 bg-gray-900 bg-opacity-5 rounded-md flex items-center justify-center"
       >
         <div class="text-center">
-          <div class="text-6xl mb-4 animate-bounce">📄</div>
-          <p class="text-xl font-semibold text-blue-700">Drop your resume here!</p>
+          <div class="text-4xl mb-2">📄</div>
+          <p class="text-sm font-medium text-gray-700">Drop your resume here</p>
         </div>
       </div>
     </div>
 
     <!-- Error Message -->
-    <div v-if="error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+    <div v-if="error" class="mt-3 p-3 bg-red-50 border border-red-100 rounded-md">
       <div class="flex items-center">
-        <svg class="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <svg class="w-4 h-4 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
         </svg>
-        <p class="text-red-800 font-medium">{{ error }}</p>
+        <p class="text-sm text-red-700">{{ error }}</p>
       </div>
     </div>
   </div>
@@ -251,5 +247,20 @@ const formatFileSize = (bytes) => {
 .file-types {
   font-size: 14px;
   font-style: italic;
+}
+
+/* Spinner animation */
+.loading-spinner {
+  border: 4px solid rgba(156, 163, 175, 0.3);
+  border-top: 4px solid rgba(75, 85, 99);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
