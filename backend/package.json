@@ -18,7 +18,9 @@
   "description": "Smart resume screening backend with NLP processing",
   "dependencies": {
     "@huggingface/inference": "^4.0.6",
+    "axios": "^1.10.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mammoth": "^1.9.1",

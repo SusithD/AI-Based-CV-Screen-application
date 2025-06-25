@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 // User schema for individual accounts
 const userSchema = new mongoose.Schema({
     email: {

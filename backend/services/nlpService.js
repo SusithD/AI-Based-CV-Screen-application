@@ -245,4 +245,85 @@ async function performIndustryAnalysis(resumeText, jobDescription) {
   return { detectedIndustry, recommendations };
 }
 
+// Helper function implementations
+function analyzeKeywordDensity(resumeText, jobDescription) {
+  const resumeWords = resumeText.toLowerCase().split(/\s+/);
+  const jobWords = jobDescription.toLowerCase().split(/\s+/);
+  
+  // Calculate keyword density and return score out of 100
+  const commonWords = resumeWords.filter(word => jobWords.includes(word));
+  return Math.round((commonWords.length / jobWords.length) * 100);
+}
+
+function checkATSCompatibility(resumeText) {
+  let score = 100;
+  
+  // Check for common ATS-unfriendly elements
+  if (resumeText.includes('│') || resumeText.includes('┌')) score -= 20; // Table borders
+  if (resumeText.length < 500) score -= 30; // Too short
+  if (resumeText.length > 5000) score -= 10; // Too long
+  
+  return Math.max(0, score);
+}
+
+function analyzeContentStructure(resumeText) {
+  let score = 0;
+  
+  // Check for key sections
+  if (/experience|work history/i.test(resumeText)) score += 25;
+  if (/education|degree|university/i.test(resumeText)) score += 25;
+  if (/skills|technologies/i.test(resumeText)) score += 25;
+  if (/contact|email|phone/i.test(resumeText)) score += 25;
+  
+  return score;
+}
+
+function analyzeExperienceAlignment(resumeText, jobDescription) {
+  const experienceKeywords = ['years', 'experience', 'senior', 'lead', 'manager', 'director'];
+  const resumeExp = experienceKeywords.filter(keyword => 
+    resumeText.toLowerCase().includes(keyword)
+  ).length;
+  const jobExp = experienceKeywords.filter(keyword => 
+    jobDescription.toLowerCase().includes(keyword)
+  ).length;
+  
+  return Math.min(100, (resumeExp / Math.max(1, jobExp)) * 100);
+}
+
+function detectIndustry(jobDescription, industries) {
+  const jobLower = jobDescription.toLowerCase();
+  
+  for (const [industry, keywords] of Object.entries(industries)) {
+    const matches = keywords.filter(keyword => jobLower.includes(keyword)).length;
+    if (matches > 0) {
+      return industry;
+    }
+  }
+  
+  return 'general';
+}
+
+function generateIndustryRecommendations(resumeText, industry) {
+  const recommendations = [];
+  
+  switch (industry) {
+    case 'tech':
+      recommendations.push('Highlight technical skills and programming languages');
+      recommendations.push('Include GitHub profile or portfolio links');
+      break;
+    case 'finance':
+      recommendations.push('Emphasize analytical and quantitative skills');
+      recommendations.push('Include relevant certifications (CFA, FRM, etc.)');
+      break;
+    case 'healthcare':
+      recommendations.push('Highlight clinical experience and certifications');
+      recommendations.push('Emphasize patient care and safety protocols');
+      break;
+    default:
+      recommendations.push('Tailor your resume to match industry-specific keywords');
+  }
+  
+  return recommendations;
+}
+
 module.exports = { screenResumeWithNLP };

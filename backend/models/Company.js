@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 // Company schema for enterprise accounts
 const companySchema = new mongoose.Schema({
     name: {
