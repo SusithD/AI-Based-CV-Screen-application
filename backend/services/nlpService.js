@@ -10,6 +10,23 @@ const SKILL_KEYWORDS = [
     'machine learning', 'data science', 'artificial intelligence', 'deep learning'
 ];
 
+// Enhanced NLP models and analysis capabilities
+const ENHANCED_SKILL_KEYWORDS = {
+  // Technical Skills by Category
+  frontend: ['react', 'vue', 'angular', 'typescript', 'javascript', 'html', 'css', 'sass', 'tailwind'],
+  backend: ['node.js', 'python', 'java', 'c#', 'go', 'rust', 'express', 'fastapi', 'spring'],
+  database: ['mongodb', 'postgresql', 'mysql', 'redis', 'elasticsearch', 'dynamodb'],
+  cloud: ['aws', 'azure', 'gcp', 'docker', 'kubernetes', 'terraform', 'serverless'],
+  devops: ['ci/cd', 'jenkins', 'github actions', 'gitlab ci', 'monitoring', 'logging'],
+  mobile: ['react native', 'flutter', 'swift', 'kotlin', 'xamarin'],
+  ai_ml: ['machine learning', 'deep learning', 'tensorflow', 'pytorch', 'scikit-learn'],
+  // Soft Skills
+  leadership: ['team lead', 'project management', 'mentoring', 'cross-functional'],
+  communication: ['presentation', 'documentation', 'stakeholder management'],
+  // Industry Certifications
+  certifications: ['aws certified', 'azure certified', 'google cloud', 'cissp', 'pmp']
+};
+
 async function screenResumeWithNLP(resumeText, jobDescription) {
     try {
         // 1. Extract entities from resume using BERT-NER
@@ -25,6 +42,12 @@ async function screenResumeWithNLP(resumeText, jobDescription) {
         // 4. Generate recommendations
         const recommendations = generateRecommendations(keywordAnalysis, similarityScore);
 
+        // 5. Calculate ATS score
+        const atsScore = await calculateATSScore(resumeText, jobDescription);
+
+        // 6. Perform industry analysis
+        const industryAnalysis = await performIndustryAnalysis(resumeText, jobDescription);
+
         return {
             matchScore: Math.round(similarityScore * 100),
             matchedKeywords: keywordAnalysis.matched,
@@ -33,7 +56,9 @@ async function screenResumeWithNLP(resumeText, jobDescription) {
             entities: {
                 resume: resumeEntities,
                 job: jobEntities
-            }
+            },
+            atsScore: atsScore,
+            industryAnalysis: industryAnalysis
         };
 
     } catch (error) {
@@ -167,6 +192,57 @@ function generateRecommendations(keywordAnalysis, similarityScore) {
     }
     
     return recommendations;
+}
+
+// Advanced ATS scoring algorithm
+async function calculateATSScore(resumeText, jobDescription) {
+  const scores = {
+    keywordMatch: 0,
+    formatOptimization: 0,
+    contentStructure: 0,
+    experienceAlignment: 0,
+    overall: 0
+  };
+
+  // Keyword density analysis
+  scores.keywordMatch = analyzeKeywordDensity(resumeText, jobDescription);
+  
+  // ATS-friendly format check
+  scores.formatOptimization = checkATSCompatibility(resumeText);
+  
+  // Content structure analysis
+  scores.contentStructure = analyzeContentStructure(resumeText);
+  
+  // Experience level alignment
+  scores.experienceAlignment = analyzeExperienceAlignment(resumeText, jobDescription);
+  
+  scores.overall = Math.round(
+    (scores.keywordMatch * 0.4 + 
+     scores.formatOptimization * 0.2 + 
+     scores.contentStructure * 0.2 + 
+     scores.experienceAlignment * 0.2)
+  );
+  
+  return scores;
+}
+
+// Industry-specific analysis
+async function performIndustryAnalysis(resumeText, jobDescription) {
+  const industries = {
+    tech: ['software', 'technology', 'startup', 'saas', 'fintech'],
+    finance: ['banking', 'investment', 'financial', 'trading', 'insurance'],
+    healthcare: ['medical', 'healthcare', 'pharmaceutical', 'biotech'],
+    consulting: ['consulting', 'advisory', 'strategy', 'management'],
+    retail: ['retail', 'e-commerce', 'consumer', 'brand']
+  };
+  
+  // Detect industry from job description
+  const detectedIndustry = detectIndustry(jobDescription, industries);
+  
+  // Provide industry-specific recommendations
+  const recommendations = generateIndustryRecommendations(resumeText, detectedIndustry);
+  
+  return { detectedIndustry, recommendations };
 }
 
 module.exports = { screenResumeWithNLP };
